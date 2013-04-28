@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Gtk;
 using CookComputing.XmlRpc;
 using System.IO;
@@ -13,24 +14,18 @@ namespace SubbyGTK
 			MainWindow win = new MainWindow ();
 			win.Show ();
 			Application.Run ();
+			//setup node
+
 		}
 
-		public static void Search (string filename)
+		public static List<podnapisi.result.subtitle>Search (string filename)
 		{
-			string cleanname = Path.GetFileNameWithoutExtension (filename);
+			string cleanname = Path.GetFileName(filename);
 			var pclient = new podnapisi.Client ();
 			var hashresult = pclient.Search (filename);
 			var xmlresult = pclient.XMLSearch (cleanname);
-			var sublist=new List<podnapisi.result.subtitle>();
-			foreach (var subtitle in xmlresult.Subtitles) {
-
-				if (subtitle.languageId == 2) {
-					sublist.Add (subtitle);
-				}
-
-			}
-		
-
+			var sublist= xmlresult.Subtitles.Where(subtitle => subtitle.languageId == 2).ToList();	
+			return sublist;
 		}
 	}
 }

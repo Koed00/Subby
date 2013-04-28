@@ -1,12 +1,19 @@
 using System;
 using Gtk;
 using SubbyGTK;
+using CookComputing.XmlRpc;
+
 public partial class MainWindow: Gtk.Window
 {	
-
+	private Gtk.ListStore subtitlestore = new Gtk.ListStore (typeof (string), typeof (string));
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
+		//customize nodeview
+		nodeview1.AppendColumn ("Title",new Gtk.CellRendererText (), "text", 0);
+		nodeview1.AppendColumn ("Downloads",new Gtk.CellRendererText (), "text", 0);
+
+		nodeview1.Model = subtitlestore;
 	}
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
@@ -18,7 +25,6 @@ public partial class MainWindow: Gtk.Window
 	protected void OnButton1Clicked (object sender, EventArgs e)
 	{
 		 string fname;
-		 string fpath;
 		FileChooserDialog chooser = new FileChooserDialog (
 			"Please select movie...",
 			this,
@@ -32,6 +38,9 @@ public partial class MainWindow: Gtk.Window
 		
 		} 
 		chooser.Destroy ();
-		MainClass.Search(entry2.Text);
+		var subtitles=MainClass.Search(entry2.Text);
+		foreach (var subtitle in subtitles) {
+			subtitlestore.AppendValues (subtitle.title, subtitle.downloads.ToString ());
+		}
 	}
 }
