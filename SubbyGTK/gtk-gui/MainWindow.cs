@@ -3,7 +3,13 @@
 public partial class MainWindow
 {
 	private global::Gtk.VBox vbox1;
-	private global::Gtk.FileChooserWidget filechooserwidget2;
+	private global::Gtk.HBox hbox2;
+	private global::Gtk.Label label1;
+	private global::Gtk.ComboBox combobox2;
+	private global::Gtk.HBox hbox1;
+	private global::Gtk.Label label3;
+	private global::Gtk.Entry entry2;
+	private global::Gtk.Button button1;
 
 	protected virtual void Build ()
 	{
@@ -17,11 +23,67 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.filechooserwidget2 = new global::Gtk.FileChooserWidget (((global::Gtk.FileChooserAction)(0)));
-		this.filechooserwidget2.Name = "filechooserwidget2";
-		this.vbox1.Add (this.filechooserwidget2);
-		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.filechooserwidget2]));
+		this.hbox2 = new global::Gtk.HBox ();
+		this.hbox2.Spacing = 6;
+		// Container child hbox2.Gtk.Box+BoxChild
+		this.label1 = new global::Gtk.Label ();
+		this.label1.Name = "label1";
+		this.label1.Xalign = 0F;
+		this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("Language");
+		this.hbox2.Add (this.label1);
+		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.label1]));
 		w1.Position = 0;
+		// Container child hbox2.Gtk.Box+BoxChild
+		this.combobox2 = global::Gtk.ComboBox.NewText ();
+		this.combobox2.AppendText (global::Mono.Unix.Catalog.GetString("English(2)"));
+		this.combobox2.AppendText (global::Mono.Unix.Catalog.GetString("Spanish(3)"));
+		this.combobox2.Name = "combobox2";
+		this.combobox2.Active = 1;
+		this.hbox2.Add (this.combobox2);
+		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.combobox2]));
+		w2.Position = 1;
+		this.vbox1.Add (this.hbox2);
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox2]));
+		w3.Position = 0;
+		w3.Expand = false;
+		w3.Fill = false;
+		// Container child vbox1.Gtk.Box+BoxChild
+		this.hbox1 = new global::Gtk.HBox ();
+		this.hbox1.Name = "hbox1";
+		this.hbox1.Spacing = 6;
+		// Container child hbox1.Gtk.Box+BoxChild
+		this.label3 = new global::Gtk.Label ();
+		this.label3.Name = "label3";
+		this.label3.Xalign = 0F;
+		this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Movie");
+		this.hbox1.Add (this.label3);
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.label3]));
+		w4.Position = 0;
+		// Container child hbox1.Gtk.Box+BoxChild
+		this.entry2 = new global::Gtk.Entry ();
+		this.entry2.CanFocus = true;
+		this.entry2.Name = "entry2";
+		this.entry2.IsEditable = true;
+		this.entry2.InvisibleChar = '●';
+		this.hbox1.Add (this.entry2);
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.entry2]));
+		w5.Position = 1;
+		// Container child hbox1.Gtk.Box+BoxChild
+		this.button1 = new global::Gtk.Button ();
+		this.button1.CanFocus = true;
+		this.button1.Name = "button1";
+		this.button1.UseUnderline = true;
+		this.button1.Label = global::Mono.Unix.Catalog.GetString ("Choose File");
+		this.hbox1.Add (this.button1);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.button1]));
+		w6.Position = 2;
+		w6.Expand = false;
+		w6.Fill = false;
+		this.vbox1.Add (this.hbox1);
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox1]));
+		w7.Position = 1;
+		w7.Expand = false;
+		w7.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
@@ -30,5 +92,6 @@ public partial class MainWindow
 		this.DefaultHeight = 300;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
+		this.button1.Clicked += new global::System.EventHandler (this.OnButton1Clicked);
 	}
 }

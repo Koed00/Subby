@@ -26,6 +26,23 @@ namespace podnapisi
 			public int id { get; set; }
 			public string title { get; set; }
 			public int year { get; set; }
+			public int movieId{ get; set;}
+			public string url { get; set;}
+			public string uploaderId { get; set; }
+			public string uploaderName{ get; set; }
+			public string release{ get; set; }
+			public int languageId{ get; set; }
+			public string languageName { get; set; }
+			public long time { get; set; }
+			public int tvSeason { get; set; }
+			public int tvEpisode { get; set; }
+			public int tvSpecial{ get; set; }
+			public int cds{ get; set; }
+			public string format{ get; set; }
+			public string fps{ get; set; }
+			public int rating { get; set; }
+			public string flags { get; set; }
+			public int downloads { get; set; }
 		}
 	}
 
