@@ -43,6 +43,15 @@ namespace podnapisi
 			return null;
 		}
 
+		public string GetFileName(int movieId){
+			string[] movieids = { movieId.ToString() };
+			XmlRpcStruct fileresult = _proxy.Download(_session,movieids);
+			if(fileresult["status"].ToString() !=Retconsts.OK) return null;
+			var y=new string[3];
+			fileresult.Values.CopyTo( y, 0);
+			//var filenames=(XmlRpcStruct) names["filename"
+			return null;
+		}
 		public result XMLSearch(string filename)
 		{
 			string podnapurl = String.Format("http://www.podnapisi.net/en/ppodnapisi/search?sK={0}&sXML=1", filename);
@@ -183,6 +192,9 @@ namespace podnapisi
 
 		[XmlRpcMethod("search")]
 		XmlRpcStruct Search(string session, string[] hashes);
+		
+		[XmlRpcMethod("download")]
+		XmlRpcStruct Download (string session, string[] subtitles);
 	}
 }
 

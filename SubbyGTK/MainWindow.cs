@@ -5,10 +5,32 @@ using CookComputing.XmlRpc;
 
 public partial class MainWindow: Gtk.Window
 {	
-	private Gtk.ListStore subtitlestore = new Gtk.ListStore (typeof (string), typeof (string));
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
+
+		Gtk.TreeViewColumn movieColumn = new Gtk.TreeViewColumn ();
+		movieColumn.Title = "Movie";
+		Gtk.CellRendererText movieNameCell = new Gtk.CellRendererText ();
+		movieColumn.PackStart (movieNameCell, true);
+
+		Gtk.TreeViewColumn yearColumn = new Gtk.TreeViewColumn ();
+		yearColumn.Title = "Year";
+		Gtk.CellRendererText yearTitleCell = new Gtk.CellRendererText ();
+		yearColumn.PackStart (yearTitleCell, true);
+
+		Gtk.TreeViewColumn ratingColumn = new Gtk.TreeViewColumn ();
+		ratingColumn.Title = "Rating";
+		Gtk.CellRendererText ratingTitleCell = new Gtk.CellRendererText ();
+		ratingColumn.PackStart (ratingTitleCell, true);
+
+		tree.AppendColumn (movieColumn);
+		tree.AppendColumn (yearColumn);
+tree.AppendColumn (ratingColumn);
+
+		movieColumn.AddAttribute (movieNameCell, "text", 0);
+		yearColumn.AddAttribute (yearTitleCell, "text", 1);
+		ratingColumn.AddAttribute (ratingTitleCell, "text", 2);
 
 	}
 
@@ -20,7 +42,7 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnButton1Clicked (object sender, EventArgs e)
 	{
-		 string fname;
+		string fname="";
 		FileChooserDialog chooser = new FileChooserDialog (
 			"Please select movie...",
 			this,
@@ -34,9 +56,30 @@ public partial class MainWindow: Gtk.Window
 		
 		} 
 		chooser.Destroy ();
-		var subtitles=MainClass.Search(entry2.Text);
-		foreach (var subtitle in subtitles) {
-			subtitlestore.AppendValues (subtitle.title, subtitle.downloads.ToString ());
+		statusbar1.Push (1, "Searching for filename.");
+		var subtitles = MainClass.Search (fname);
+		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
+		Gtk.TreeStore musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string),typeof(int));
+		Gtk.TreeIter iter;
+		foreach (var sub in subtitles) {
+			iter = musicListStore.AppendValues (sub.title, sub.year.ToString(), sub.rating.ToString(), sub.id);
+			var releases = sub.release.Split (' ');
+			foreach (var release in releases) {
+				musicListStore.AppendValues (iter, release);
+			}
+
 		}
+		tree.Model = musicListStore;
+		tree.ExpandAll ();
+
+	}
+
+	protected void OnButton2Clicked (object sender, EventArgs e)
+	{
+		TreeIter iter;
+		tree.Selection.GetSelected (out iter);
+		var  movieid=(int) tree.Model.GetValue (iter, 3);
+		var podnap = new podnapisi.Client ();
+		var filename = podnap.GetFileName (movieid);
 	}
 }
