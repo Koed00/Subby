@@ -51,6 +51,9 @@
     <Reference Include="Mono.Posix" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="XmlRpcCS">
+      <HintPath>XmlRpcCS.dll</HintPath>
+    </Reference>
     <Reference Include="CookComputing.XmlRpcV2">
       <HintPath>..\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>

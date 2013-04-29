@@ -5,50 +5,53 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using CookComputing.XmlRpc;
 using System.Linq;
-
+using Nwc.XmlRpc;
+using CookComputing.XmlRpc;
+using System.Collections;
 namespace podnapisi
 {
 	public class Client
 	{
-		private readonly IStateName _proxy = XmlRpcProxyGen.Create<IStateName>();
+		private readonly IStateName _proxy = XmlRpcProxyGen.Create<IStateName> ();
 		private readonly string _session;
 
-		public Client()
+		public Client ()
 		{
-			_session = Login();
+			_session = Login ();
 		}
 
-		private string Login()
+		private string Login ()
 		{
-			XmlRpcStruct init = _proxy.Initiate("Subby_0_1");
-			string session = init["session"].ToString();
-			string nonce = init["nonce"].ToString();
-			string passhash = Sha256(Md5Hash("7951leo") + nonce);
-			XmlRpcStruct auth = _proxy.Authenticate(session, "koed00", passhash);
-			if (auth["status"].ToString() == Retconsts.OK) return session;
+			var init = podClient.Initiate ("Subby_0_1");
+			var session = init ["session"].ToString();
+			var nonce = init ["nonce"].ToString();
+			string passhash = Sha256 (Md5Hash("7951leo") + nonce);
+			XmlRpcStruct auth = _proxy.Authenticate (session, "koed00", passhash);
+			if (auth ["status"].ToString () == Retconsts.OK)
+				return session;
 			return "";
 		}
 
-		public XmlRpcStruct Search(string filename)
+		public XmlRpcStruct Search (string filename)
 		{
-			byte[] moviehash = ComputeMovieHash(filename);
+			byte[] moviehash = ComputeMovieHash (filename);
 			var hashes = new string[1];
-			hashes[0] = ToHexadecimal(moviehash);
-			XmlRpcStruct result = _proxy.Search(_session, hashes);
-			var results = (XmlRpcStruct) result["results"];
-			if (results.Count > 0) return results;
+			hashes [0] = ToHexadecimal (moviehash);
+			XmlRpcStruct result = _proxy.Search (_session, hashes);
+			var results = (XmlRpcStruct)result ["results"];
+			if (results.Count > 0)
+				return results;
 
 			return null;
 		}
 
-		public string GetFileName(int movieId){
+		public string GetFileName (int movieId)
+		{
 			string[] movieids = { movieId.ToString() };
 			XmlRpcStruct fileresult = _proxy.Download(_session,movieids);
 			if(fileresult["status"].ToString() !=Retconsts.OK) return null;
-			var y=new string[3];
-			fileresult.Values.CopyTo( y, 0);
+			var names=(XmlRpcStruct) fileresult["names"];
 			//var filenames=(XmlRpcStruct) names["filename"
 			return null;
 		}
@@ -179,6 +182,21 @@ namespace podnapisi
 		public const string InvalidLanguage = "402";
 		public const string InvalidHash = "403";
 		public const string InvalidArchive = "404";
+	}
+
+	public  class  podClient{
+		private static string URL=@"http://ssp.podnapisi.net:8000/RPC2/";
+		private static Nwc.XmlRpc.XmlRpcRequest client = new Nwc.XmlRpc.XmlRpcRequest();
+		public static Hashtable Initiate(string appname){
+			client.MethodName = "initiate";
+			client.Params.Clear();
+			client.Params.Add(appname);
+			Nwc.XmlRpc.XmlRpcResponse response = client.Send(URL);
+			if (response.IsFault)
+				return null;
+			return (Hashtable) response.Value;
+		}
+
 	}
 
 	[XmlRpcUrl("http://ssp.podnapisi.net:8000/RPC2/")]
