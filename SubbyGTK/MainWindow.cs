@@ -9,11 +9,7 @@ public partial class MainWindow: Gtk.Window
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-		//customize nodeview
-		nodeview1.AppendColumn ("Title",new Gtk.CellRendererText (), "text", 0);
-		nodeview1.AppendColumn ("Downloads",new Gtk.CellRendererText (), "text", 0);
 
-		nodeview1.Model = subtitlestore;
 	}
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
