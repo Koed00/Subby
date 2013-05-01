@@ -7,7 +7,8 @@ public partial class MainWindow: Gtk.Window
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-
+		var subclient = new OpenSubtitlesClient ();
+		subclient.FileSearch ("");
 		Gtk.TreeViewColumn movieColumn = new Gtk.TreeViewColumn ();
 		movieColumn.Title = "Movie";
 		Gtk.CellRendererText movieNameCell = new Gtk.CellRendererText ();
@@ -57,6 +58,7 @@ tree.AppendColumn (ratingColumn);
 		chooser.Destroy ();
 		statusbar1.Push (1, "Searching for filename.");
 		Gtk.TreeStore musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string),typeof(int));
+		var opensub = new OpenSubtitlesClient ();
 //		var subtitles = MainClass.Search (fname);
 //		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 

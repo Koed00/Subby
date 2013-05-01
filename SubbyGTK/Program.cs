@@ -14,7 +14,7 @@ namespace SubbyGTK
 			win.Show ();
 			Application.Run ();
 			//setup node
-
+;
 		}
 
 
