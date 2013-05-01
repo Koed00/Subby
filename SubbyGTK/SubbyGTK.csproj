@@ -51,9 +51,6 @@
     <Reference Include="Mono.Posix" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="XmlRpcCS">
-      <HintPath>XmlRpcCS.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -74,5 +71,11 @@
     <Content Include="SubbyLauncher.desktop">
       <DeployService-TargetDirectoryId>Linux.DesktopApplications</DeployService-TargetDirectoryId>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XmlRpcCs\XmlRpcCs.csproj">
+      <Project>{8B167B7D-7F6F-416F-AB29-92959FF5251A}</Project>
+      <Name>XmlRpcCs</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

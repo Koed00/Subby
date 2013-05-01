@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubbyGTK", "SubbyGTK\SubbyG
 EndProject
 Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "SubbyPackage", "SubbyPackage\SubbyPackage.mdproj", "{9016C485-45CE-4AC3-8323-8236EEE38FA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlRpcCs", "XmlRpcCs\XmlRpcCs.csproj", "{8B167B7D-7F6F-416F-AB29-92959FF5251A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{7BCCA6A8-F2AA-4D6D-9C73-38C2AD3A08F2}.Debug|x86.Build.0 = Debug|x86
 		{7BCCA6A8-F2AA-4D6D-9C73-38C2AD3A08F2}.Release|x86.ActiveCfg = Release|x86
 		{7BCCA6A8-F2AA-4D6D-9C73-38C2AD3A08F2}.Release|x86.Build.0 = Release|x86
+		{8B167B7D-7F6F-416F-AB29-92959FF5251A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B167B7D-7F6F-416F-AB29-92959FF5251A}.Debug|x86.Build.0 = Debug|Any CPU
+		{8B167B7D-7F6F-416F-AB29-92959FF5251A}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B167B7D-7F6F-416F-AB29-92959FF5251A}.Release|x86.Build.0 = Release|Any CPU
 		{9016C485-45CE-4AC3-8323-8236EEE38FA5}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{9016C485-45CE-4AC3-8323-8236EEE38FA5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection

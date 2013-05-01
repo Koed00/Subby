@@ -13,7 +13,6 @@ namespace SubbyGTK
 
 		public OpenSubtitlesClient ()
 		{
-			//var x=XmlRPC.XmlRpcExecMethod(apiurl,"ServerInfo",null);
 			token = Login ();
 		}
 
