@@ -44,10 +44,7 @@ public partial class MainWindow
 		w1.Position = 0;
 		// Container child hbox2.Gtk.Box+BoxChild
 		this.combobox2 = global::Gtk.ComboBox.NewText ();
-		this.combobox2.AppendText (global::Mono.Unix.Catalog.GetString("English"));
-		this.combobox2.AppendText (global::Mono.Unix.Catalog.GetString("Spanish"));
 		this.combobox2.Name = "combobox2";
-		this.combobox2.Active = 0;
 		this.hbox2.Add (this.combobox2);
 		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.combobox2]));
 		w2.Position = 1;

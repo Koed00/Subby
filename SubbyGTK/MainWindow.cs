@@ -1,6 +1,9 @@
 using System;
 using Gtk;
 using SubbyGTK;
+using System.Threading;
+using System.Collections;
+using System.Collections.Generic;
 
 public partial class MainWindow: Gtk.Window
 {	
@@ -17,6 +20,16 @@ public partial class MainWindow: Gtk.Window
 		Gtk.CellRendererText yearTitleCell = new Gtk.CellRendererText ();
 		yearColumn.PackStart (yearTitleCell, true);
 
+		Gtk.TreeViewColumn seasonColumn = new Gtk.TreeViewColumn ();
+		seasonColumn.Title = "Season";
+		Gtk.CellRendererText seasonTitleCell = new Gtk.CellRendererText ();
+		seasonColumn.PackStart (seasonTitleCell, true);
+
+		Gtk.TreeViewColumn episodeColumn = new Gtk.TreeViewColumn ();
+		episodeColumn.Title = "Episode";
+		Gtk.CellRendererText episodeTitleCell = new Gtk.CellRendererText ();
+		episodeColumn.PackStart (episodeTitleCell, true);
+
 		Gtk.TreeViewColumn ratingColumn = new Gtk.TreeViewColumn ();
 		ratingColumn.Title = "Rating";
 		Gtk.CellRendererText ratingTitleCell = new Gtk.CellRendererText ();
@@ -24,11 +37,25 @@ public partial class MainWindow: Gtk.Window
 
 		tree.AppendColumn (movieColumn);
 		tree.AppendColumn (yearColumn);
-tree.AppendColumn (ratingColumn);
+		tree.AppendColumn (seasonColumn);
+		tree.AppendColumn (episodeColumn);
+		tree.AppendColumn (ratingColumn);
 
 		movieColumn.AddAttribute (movieNameCell, "text", 0);
 		yearColumn.AddAttribute (yearTitleCell, "text", 1);
-		ratingColumn.AddAttribute (ratingTitleCell, "text", 2);
+		seasonColumn.AddAttribute (seasonTitleCell, "text", 2);
+		episodeColumn.AddAttribute (episodeTitleCell, "text", 3);
+		ratingColumn.AddAttribute (ratingTitleCell, "text", 4);
+
+		var opensub = new OpenSubtitlesClient ();
+		var langs = opensub.GetSubLanguages ();
+		var langstore = new Gtk.ListStore (typeof (string), typeof(string));
+		foreach (Hashtable lang in langs){
+
+			langstore.AppendValues(lang["LanguageName"].ToString(), (lang["ISO639"]?? string.Empty).ToString());
+
+		}
+		combobox2.Model = langstore;
 
 	}
 
@@ -54,24 +81,24 @@ tree.AppendColumn (ratingColumn);
 		
 		} 
 		chooser.Destroy ();
-		statusbar1.Push (1, "Searching for filename.");
-		Gtk.TreeStore musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string),typeof(int));
+		ThreadPool.QueueUserWorkItem(x => 	statusbar1.Push (1, "Searching for filename."));
+	
+		Gtk.TreeStore musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string),typeof(string),typeof(string),typeof(string));
 		var opensub = new OpenSubtitlesClient ();
 		var subtitles = opensub.FileSearch (fname);
-//		var subtitles = MainClass.Search (fname);
-//		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
+		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 
-//		Gtk.TreeIter iter;
-//		foreach (var sub in subtitles) {
-//			iter = musicListStore.AppendValues (sub.title, sub.year.ToString(), sub.rating.ToString(), sub.id);
-//			var releases = sub.release.Split (' ');
-//			foreach (var release in releases) {
-//				musicListStore.AppendValues (iter, release);
-//			}
-//
-//		}
+		Gtk.TreeIter iter;
+		foreach (var sub in subtitles) {
+			iter = musicListStore.AppendValues (sub.MovieName, sub.MovieYear,sub.SeriesSeason,sub.SeriesEpisode, sub.SubRating, sub.SubDownloadLink);
+
+			musicListStore.AppendValues (iter,"Author Comment:", sub.SubAuthorComment);
+			musicListStore.AppendValues (iter,"Matched by", sub.MatchedBy);
+
+
+		}
 		tree.Model = musicListStore;
-		tree.ExpandAll ();
+		//tree.ExpandAll ();
 
 	}
 
@@ -79,8 +106,7 @@ tree.AppendColumn (ratingColumn);
 	{
 		TreeIter iter;
 		tree.Selection.GetSelected (out iter);
-		var  movieid=(int) tree.Model.GetValue (iter, 3);
-		//var podnap = new podnapisi.Client ();
-		//var filename = podnap.GetFileName (movieid);
+		var  downloadlinkg=(string) tree.Model.GetValue (iter, 5);
+
 	}
 }

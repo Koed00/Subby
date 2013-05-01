@@ -66,6 +66,12 @@ namespace SubbyGTK
 
 		}
 
+		public ArrayList GetSubLanguages(){
+			var client = new Nwc.XmlRpc.XmlRpcRequest ();
+			client.MethodName = "GetSubLanguages";
+			var result = (Hashtable)client.Invoke (apiurl);
+			return (ArrayList)result["data"];
+		}
 		public  List<SearchResult> TitleSearch (string filename)
 		{
 			var client = new Nwc.XmlRpc.XmlRpcRequest ();
