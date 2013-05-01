@@ -1,7 +1,6 @@
 using System;
 using Gtk;
 using SubbyGTK;
-using CookComputing.XmlRpc;
 
 public partial class MainWindow: Gtk.Window
 {	
@@ -57,18 +56,19 @@ tree.AppendColumn (ratingColumn);
 		} 
 		chooser.Destroy ();
 		statusbar1.Push (1, "Searching for filename.");
-		var subtitles = MainClass.Search (fname);
-		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 		Gtk.TreeStore musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string),typeof(int));
-		Gtk.TreeIter iter;
-		foreach (var sub in subtitles) {
-			iter = musicListStore.AppendValues (sub.title, sub.year.ToString(), sub.rating.ToString(), sub.id);
-			var releases = sub.release.Split (' ');
-			foreach (var release in releases) {
-				musicListStore.AppendValues (iter, release);
-			}
+//		var subtitles = MainClass.Search (fname);
+//		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 
-		}
+//		Gtk.TreeIter iter;
+//		foreach (var sub in subtitles) {
+//			iter = musicListStore.AppendValues (sub.title, sub.year.ToString(), sub.rating.ToString(), sub.id);
+//			var releases = sub.release.Split (' ');
+//			foreach (var release in releases) {
+//				musicListStore.AppendValues (iter, release);
+//			}
+//
+//		}
 		tree.Model = musicListStore;
 		tree.ExpandAll ();
 
@@ -79,7 +79,7 @@ tree.AppendColumn (ratingColumn);
 		TreeIter iter;
 		tree.Selection.GetSelected (out iter);
 		var  movieid=(int) tree.Model.GetValue (iter, 3);
-		var podnap = new podnapisi.Client ();
-		var filename = podnap.GetFileName (movieid);
+		//var podnap = new podnapisi.Client ();
+		//var filename = podnap.GetFileName (movieid);
 	}
 }
