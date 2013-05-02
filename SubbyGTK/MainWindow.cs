@@ -1,4 +1,5 @@
 using System;
+using Gtk;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -115,7 +116,7 @@ public partial class MainWindow : Gtk.Window
         TreeIter iter;
         tree.Selection.GetSelected(out iter);
         var downloadlinkg = (string) tree.Model.GetValue(iter, 5);
-        string movietitle = Path.GetFileNameWithoutExtension(fname);
+        string movietitle = System.IO.Path.GetFileNameWithoutExtension(fname);
         var Client = new WebClient();
         string filename = "/tmp/tmp_" + movietitle + ".gz";
         Client.DownloadFile(downloadlinkg, filename);
@@ -134,7 +135,7 @@ public partial class MainWindow : Gtk.Window
             }
         }
         fileToDecompress.Delete();
-        string origlocation = Path.GetDirectoryName(fname);
+        string origlocation = System.IO.Path.GetDirectoryName(fname);
         string newfile = origlocation + "/" + movietitle + ".srt"; //TODO add actual extension type
         if (File.Exists(newfile))
         {
