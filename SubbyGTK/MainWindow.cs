@@ -110,6 +110,7 @@ public partial class MainWindow : Gtk.Window
 	}
 
 	private void GetSubs(){
+		tree.Model = null;
 		statusbar1.Push (1, "Searching for filename.");
 		var musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string), typeof(string),
 		                                        typeof(string), typeof(string));
@@ -122,6 +123,7 @@ public partial class MainWindow : Gtk.Window
 		else{lang = "all";}
 		List<OpenSubtitlesClient.SearchResult> subtitles = opensub.FileSearch (fname,lang);
 		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
+		if(subtitles.Count==0) return;
 
 		Gtk.TreeIter iter;
 		foreach (OpenSubtitlesClient.SearchResult sub in subtitles) {
