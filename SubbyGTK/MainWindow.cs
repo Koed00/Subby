@@ -62,8 +62,9 @@ public partial class MainWindow : Gtk.Window
 		var opensub = new OpenSubtitlesClient ();
 		ArrayList langs = opensub.GetSubLanguages ();
 		var langstore = new Gtk.ListStore (typeof (string), typeof(string));
+		langstore.AppendValues ("All", "all");
 		foreach (Hashtable lang in langs) {
-			langstore.AppendValues (lang["LanguageName"].ToString(), (lang ["ISO639"] ?? string.Empty).ToString ());
+			langstore.AppendValues (lang["LanguageName"].ToString(), (lang ["SubLanguageID"] ?? string.Empty).ToString ());
 		}
 		combobox2.Model = langstore;
 		statusbar1.Push (4, "Ready.");
@@ -94,11 +95,8 @@ public partial class MainWindow : Gtk.Window
 		filt.AddMimeType ("video/mpeg");
 		filt.AddMimeType ("video/x-dv");
 		filt.AddMimeType ("video/x-sgi-movie");
-
-
 		chooser.AddFilter (filt);
-		var resp = chooser.Run ();
-		if (resp == (int)ResponseType.Accept) {
+		if (chooser.Run () == (int)ResponseType.Accept) {
 			fname = chooser.Filename;
 			entry2.Text = fname;
 			chooser.Destroy ();
@@ -107,26 +105,35 @@ public partial class MainWindow : Gtk.Window
 			return;
 		}
 
-		statusbar1.Push (1, "Searching for filename.");
+		GetSubs ();
+	
+	}
 
+	private void GetSubs(){
+		statusbar1.Push (1, "Searching for filename.");
 		var musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string), typeof(string),
-		                                             typeof(string), typeof(string));
+		                                        typeof(string), typeof(string));
 		var opensub = new OpenSubtitlesClient ();
-		List<OpenSubtitlesClient.SearchResult> subtitles = opensub.FileSearch (fname);
+		//get the selected langauge
+		var model = combobox2.Model;
+		TreeIter itar;
+		string lang;
+		if(combobox2.GetActiveIter(out itar)) lang =(string)combobox2.Model.GetValue (itar,1);
+		else{lang = "all";}
+		List<OpenSubtitlesClient.SearchResult> subtitles = opensub.FileSearch (fname,lang);
 		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 
 		Gtk.TreeIter iter;
 		foreach (OpenSubtitlesClient.SearchResult sub in subtitles) {
 			iter = musicListStore.AppendValues (sub.MovieName, sub.MovieYear, sub.SeriesSeason, sub.SeriesEpisode,
-			                                            sub.SubRating, sub.SubDownloadLink);
+			                                    sub.SubRating, sub.SubDownloadLink);
 
 			musicListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
 			musicListStore.AppendValues (iter, "Language", sub.LanguageName);
 		}
 		tree.Model = musicListStore;
-		//tree.ExpandAll ();
-	}
 
+	}
 	protected void OnButton2Clicked (object sender, EventArgs e)
 	{
 		TreeIter iter;
@@ -155,6 +162,11 @@ public partial class MainWindow : Gtk.Window
 		} //TODO: ask for overwrite?
 
 		File.Move (newFileName, newfile);
-		statusbar1.Push (3, "Downloaded " + newfile + ". Done");
+		statusbar1.Push (3, "Downloaded " + newfile + ".");
+	}
+
+	protected void combobox2changed (object sender, EventArgs e)
+	{
+		if(!String.IsNullOrEmpty(fname)) GetSubs();
 	}
 }

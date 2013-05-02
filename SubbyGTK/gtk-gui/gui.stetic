@@ -39,6 +39,7 @@
                 <property name="MemberName" />
                 <property name="IsTextCombo">True</property>
                 <property name="Items" translatable="yes" />
+                <signal name="Changed" handler="combobox2changed" />
               </widget>
               <packing>
                 <property name="Position">1</property>

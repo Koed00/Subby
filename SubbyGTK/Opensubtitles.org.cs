@@ -44,7 +44,7 @@ namespace SubbyGTK
             return (result["status"].ToString() == "200 OK");
         }
 
-        public List<SearchResult> FileSearch(string filename)
+        public List<SearchResult> FileSearch(string filename, string lang)
         {
             var client = new XmlRpcRequest {MethodName = "SearchSubtitles"};
             client.Params.Add(_token);
@@ -54,12 +54,13 @@ namespace SubbyGTK
             long moviebytes = MovieHasher.GetByteSize(filename);
             qhash.Add("moviehash", moviehash);
             qhash.Add("moviebytesize", moviebytes);
+			qhash.Add ("sublanguageid", lang);
             query.Add(qhash);
             client.Params.Add(query);
             var result = (Hashtable) client.Invoke(Apiurl);
             bool hasdata;
             if (bool.TryParse(result["data"].ToString(), out hasdata))
-                return TitleSearch(filename);
+                return TitleSearch(filename, lang);
             return ParseSearchResult(result);
         }
 
@@ -70,7 +71,7 @@ namespace SubbyGTK
             return (ArrayList) result["data"];
         }
 
-        public List<SearchResult> TitleSearch(string filename)
+        public List<SearchResult> TitleSearch(string filename, string lang)
         {
             var client = new XmlRpcRequest {MethodName = "SearchSubtitles"};
             client.Params.Add(_token);
@@ -78,6 +79,7 @@ namespace SubbyGTK
             var qhash = new Hashtable();
             string movietitle = Path.GetFileNameWithoutExtension(filename);
             qhash.Add("query", movietitle);
+			qhash.Add ("sublanguageid", lang);
             query.Add(qhash);
             client.Params.Add(query);
             var result = (Hashtable) client.Invoke(Apiurl);
