@@ -39,17 +39,24 @@ public partial class MainWindow : Gtk.Window
 		var ratingTitleCell = new Gtk.CellRendererText ();
 		ratingColumn.PackStart (ratingTitleCell, true);
 
+		var downloadsColumn = new Gtk.TreeViewColumn ();
+		downloadsColumn.Title = "Downloads";
+		var downloadsTitleCell = new Gtk.CellRendererText ();
+		downloadsColumn.PackStart (downloadsTitleCell, true);
+
 		tree.AppendColumn (movieColumn);
 		tree.AppendColumn (yearColumn);
 		tree.AppendColumn (seasonColumn);
 		tree.AppendColumn (episodeColumn);
+		tree.AppendColumn (downloadsColumn);
 		tree.AppendColumn (ratingColumn);
 
 		movieColumn.AddAttribute (movieNameCell, "text", 0);
 		yearColumn.AddAttribute (yearTitleCell, "text", 1);
 		seasonColumn.AddAttribute (seasonTitleCell, "text", 2);
 		episodeColumn.AddAttribute (episodeTitleCell, "text", 3);
-		ratingColumn.AddAttribute (ratingTitleCell, "text", 4);
+		downloadsColumn.AddAttribute (downloadsTitleCell, "text", 4);
+		ratingColumn.AddAttribute (ratingTitleCell, "text", 5);
 	}
 
 	public void PushStatus (uint i, string statustext)
@@ -113,25 +120,27 @@ public partial class MainWindow : Gtk.Window
 		tree.Model = null;
 		statusbar1.Push (1, "Searching for filename.");
 		var musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string), typeof(string),
-		                                        typeof(string), typeof(string));
+		                                        typeof(string), typeof(string), typeof(string));
 		var opensub = new OpenSubtitlesClient ();
-		//get the selected langauge
+		//get the selected language
+		//TODO get last selected language from prefs
 		var model = combobox2.Model;
 		TreeIter itar;
 		string lang;
 		if(combobox2.GetActiveIter(out itar)) lang =(string)combobox2.Model.GetValue (itar,1);
 		else{lang = "all";}
+		//TODO save selected language to prefs
 		List<OpenSubtitlesClient.SearchResult> subtitles = opensub.FileSearch (fname,lang);
 		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 		if(subtitles.Count==0) return;
 
 		Gtk.TreeIter iter;
 		foreach (OpenSubtitlesClient.SearchResult sub in subtitles) {
-			iter = musicListStore.AppendValues (sub.MovieName, sub.MovieYear, sub.SeriesSeason, sub.SeriesEpisode,
+			iter = musicListStore.AppendValues (sub.MovieName, sub.MovieYear, sub.SeriesSeason, sub.SeriesEpisode,sub.SubDownloadsCnt,
 			                                    sub.SubRating, sub.SubDownloadLink);
 
-			musicListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
-			musicListStore.AppendValues (iter, "Language", sub.LanguageName);
+			//musicListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
+			//musicListStore.AppendValues (iter, "Language", sub.LanguageName);
 		}
 		tree.Model = musicListStore;
 
@@ -140,7 +149,7 @@ public partial class MainWindow : Gtk.Window
 	{
 		TreeIter iter;
 		tree.Selection.GetSelected (out iter);
-		var downloadlinkg = (string)tree.Model.GetValue (iter, 5);
+		var downloadlinkg = (string)tree.Model.GetValue (iter, 6);
 		string movietitle = System.IO.Path.GetFileNameWithoutExtension (fname);
 		var Client = new WebClient ();
 		string filename = "/tmp/tmp_" + movietitle + ".gz";
