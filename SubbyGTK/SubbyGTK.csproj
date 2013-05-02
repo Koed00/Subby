@@ -9,16 +9,19 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>SubbyGTK</RootNamespace>
     <AssemblyName>SubbyGTK</AssemblyName>
+    <StartupObject>SubbyGTK.MainClass</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <PlatformTarget>x86</PlatformTarget>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <GenerateDocumentation>true</GenerateDocumentation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Optimize>true</Optimize>
@@ -27,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <GenerateDocumentation>true</GenerateDocumentation>
+    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,6 +57,7 @@
     <Reference Include="Mono.Posix" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -65,6 +72,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Opensubtitles.org.cs" />
     <Compile Include="GetHash.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcException.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcDeserializer.cs" />
+    <Compile Include="XmlRpcCs\Logger.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcSerializer.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcResponseDeserializer.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcRequestDeserializer.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcRequest.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcErrorCodes.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcXmlTokens.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcResponseSerializer.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcResponse.cs" />
+    <Compile Include="XmlRpcCs\XmlRpcRequestSerializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -73,9 +92,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XmlRpcCs\XmlRpcCs.csproj">
-      <Project>{8B167B7D-7F6F-416F-AB29-92959FF5251A}</Project>
-      <Name>XmlRpcCs</Name>
-    </ProjectReference>
+    <Folder Include="XmlRpcCs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
 </Project>

@@ -1,15 +1,13 @@
 using System;
-using Nwc.XmlRpc;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace SubbyGTK
 {
 	public class OpenSubtitlesClient
 	{
-		private const string useragent = "OS Test User Agent";
+		private const string useragent = "Subby";
 		private const string apiurl = "http://api.opensubtitles.org/xml-rpc";
 		private string token;
 
@@ -20,7 +18,7 @@ namespace SubbyGTK
 
 		public string Login ()
 		{
-			var client = new Nwc.XmlRpc.XmlRpcRequest ();
+			var client = new XmlRpc.XmlRpcRequest ();
 			client.MethodName = "LogIn";
 			client.Params.Add ("");
 			client.Params.Add ("");
@@ -37,7 +35,7 @@ namespace SubbyGTK
 		{
 			if (string.IsNullOrEmpty (token))
 				return false;
-			var client = new Nwc.XmlRpc.XmlRpcRequest ();
+			var client = new XmlRpc.XmlRpcRequest ();
 			client.MethodName = "LogOut";
 			client.Params.Add (token);
 			client.Params.Add (useragent);
@@ -47,7 +45,7 @@ namespace SubbyGTK
 
 		public List<SearchResult> FileSearch (string filename)
 		{
-			var client = new Nwc.XmlRpc.XmlRpcRequest ();
+			var client = new XmlRpc.XmlRpcRequest ();
 			client.MethodName = "SearchSubtitles";
 			client.Params.Add (token);
 			var query = new ArrayList ();
@@ -67,14 +65,14 @@ namespace SubbyGTK
 		}
 
 		public ArrayList GetSubLanguages(){
-			var client = new Nwc.XmlRpc.XmlRpcRequest ();
+			var client = new XmlRpc.XmlRpcRequest ();
 			client.MethodName = "GetSubLanguages";
 			var result = (Hashtable)client.Invoke (apiurl);
 			return (ArrayList)result["data"];
 		}
 		public  List<SearchResult> TitleSearch (string filename)
 		{
-			var client = new Nwc.XmlRpc.XmlRpcRequest ();
+			var client = new XmlRpc.XmlRpcRequest ();
 			client.MethodName = "SearchSubtitles";
 			client.Params.Add (token);
 			var query = new ArrayList ();

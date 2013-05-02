@@ -4,9 +4,14 @@ using SubbyGTK;
 using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.IO;
+using System.IO.Compression;
 
 public partial class MainWindow: Gtk.Window
 {	
+	private	string fname = string.Empty;
+
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
@@ -47,18 +52,27 @@ public partial class MainWindow: Gtk.Window
 		episodeColumn.AddAttribute (episodeTitleCell, "text", 3);
 		ratingColumn.AddAttribute (ratingTitleCell, "text", 4);
 
+
+	}
+	public void PushStatus(uint i, string statustext){
+
+		statusbar1.Push (i, statustext);
+	}
+
+	public void PopulateLanguages(string deflang){
+
 		var opensub = new OpenSubtitlesClient ();
 		var langs = opensub.GetSubLanguages ();
 		var langstore = new Gtk.ListStore (typeof (string), typeof(string));
-		foreach (Hashtable lang in langs){
+		foreach (Hashtable lang in langs) {
 
-			langstore.AppendValues(lang["LanguageName"].ToString(), (lang["ISO639"]?? string.Empty).ToString());
+			langstore.AppendValues (lang["LanguageName"].ToString(), (lang ["ISO639"] ?? string.Empty).ToString ());
 
 		}
 		combobox2.Model = langstore;
-
+		statusbar1.Push (4, "Ready.");
 	}
-
+	
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
 		Application.Quit ();
@@ -67,7 +81,6 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnButton1Clicked (object sender, EventArgs e)
 	{
-		string fname="";
 		FileChooserDialog chooser = new FileChooserDialog (
 			"Please select movie...",
 			this,
@@ -81,19 +94,19 @@ public partial class MainWindow: Gtk.Window
 		
 		} 
 		chooser.Destroy ();
-		ThreadPool.QueueUserWorkItem(x => 	statusbar1.Push (1, "Searching for filename."));
+		statusbar1.Push (1, "Searching for filename.");
 	
-		Gtk.TreeStore musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string),typeof(string),typeof(string),typeof(string));
+		Gtk.TreeStore musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
 		var opensub = new OpenSubtitlesClient ();
 		var subtitles = opensub.FileSearch (fname);
 		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 
 		Gtk.TreeIter iter;
 		foreach (var sub in subtitles) {
-			iter = musicListStore.AppendValues (sub.MovieName, sub.MovieYear,sub.SeriesSeason,sub.SeriesEpisode, sub.SubRating, sub.SubDownloadLink);
+			iter = musicListStore.AppendValues (sub.MovieName, sub.MovieYear, sub.SeriesSeason, sub.SeriesEpisode, sub.SubRating, sub.SubDownloadLink);
 
-			musicListStore.AppendValues (iter,"Author Comment:", sub.SubAuthorComment);
-			musicListStore.AppendValues (iter,"Matched by", sub.MatchedBy);
+			musicListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
+			musicListStore.AppendValues (iter, "Language", sub.LanguageName);
 
 
 		}
@@ -106,7 +119,33 @@ public partial class MainWindow: Gtk.Window
 	{
 		TreeIter iter;
 		tree.Selection.GetSelected (out iter);
-		var  downloadlinkg=(string) tree.Model.GetValue (iter, 5);
+		var downloadlinkg = (string)tree.Model.GetValue (iter, 5);
+		var movietitle = System.IO.Path.GetFileNameWithoutExtension (fname);
+		WebClient Client = new WebClient ();
+		var filename = "/tmp/tmp_" + movietitle + ".gz";
+		Client.DownloadFile (downloadlinkg, filename);
+		var fileToDecompress = new FileInfo (filename);
+		string currentFileName = fileToDecompress.FullName;
+		string newFileName = currentFileName.Remove (currentFileName.Length - fileToDecompress.Extension.Length);
+
+		using (FileStream originalFileStream = fileToDecompress.OpenRead()) {
+			using (FileStream decompressedFileStream = File.Create(newFileName)) {
+				using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress)) {
+					decompressionStream.CopyTo (decompressedFileStream);
+
+				}
+			}
+		}
+		fileToDecompress.Delete ();
+		string origlocation = System.IO.Path.GetDirectoryName (fname);
+		string newfile = origlocation + "/" + movietitle + ".srt"; //TODO add actual extension type
+		if (File.Exists (newfile)) {
+			File.Delete (newfile);
+		} //TODO: ask for overwrite?
+
+		File.Move (newFileName, newfile);
+		statusbar1.Push (3, "Downloaded " + newfile+". Done");
+
 
 	}
 }

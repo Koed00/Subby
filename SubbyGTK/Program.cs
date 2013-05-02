@@ -3,6 +3,7 @@ using System.Linq;
 using Gtk;
 using System.IO;
 using System.Collections.Generic;
+using System.Configuration;
 namespace SubbyGTK
 {
 	class MainClass
@@ -11,10 +12,11 @@ namespace SubbyGTK
 		{
 			Application.Init ();
 			MainWindow win = new MainWindow ();
+			win.PopulateLanguages (ConfigurationManager.AppSettings["sublanguage"].ToString());
 			win.Show ();
 			Application.Run ();
 			//setup node
-;
+	
 		}
 
 
