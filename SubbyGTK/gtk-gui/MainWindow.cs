@@ -22,7 +22,7 @@ public partial class MainWindow
 		// Widget MainWindow
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString ("Subby");
-		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+		this.WindowPosition = ((global::Gtk.WindowPosition)(1));
 		this.AllowShrink = true;
 		this.DefaultWidth = 640;
 		this.DefaultHeight = 480;
