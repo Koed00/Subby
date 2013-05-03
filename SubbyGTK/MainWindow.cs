@@ -15,7 +15,7 @@ public partial class MainWindow : Gtk.Window
 	{
 		Build ();
 		var movieColumn = new Gtk.TreeViewColumn ();
-		movieColumn.Title = "Movie";
+		movieColumn.Title = "Title";
 		var movieNameCell = new Gtk.CellRendererText ();
 		movieColumn.PackStart (movieNameCell, true);
 
@@ -35,7 +35,7 @@ public partial class MainWindow : Gtk.Window
 		episodeColumn.PackStart (episodeTitleCell, true);
 
 		var ratingColumn = new Gtk.TreeViewColumn ();
-		ratingColumn.Title = "Rating";
+		ratingColumn.Title = "Uploader";
 		var ratingTitleCell = new Gtk.CellRendererText ();
 		ratingColumn.PackStart (ratingTitleCell, true);
 
@@ -57,6 +57,8 @@ public partial class MainWindow : Gtk.Window
 		episodeColumn.AddAttribute (episodeTitleCell, "text", 3);
 		downloadsColumn.AddAttribute (downloadsTitleCell, "text", 4);
 		ratingColumn.AddAttribute (ratingTitleCell, "text", 5);
+
+
 	}
 
 	public void PushStatus (uint i, string statustext)
@@ -119,7 +121,7 @@ public partial class MainWindow : Gtk.Window
 	private void GetSubs(){
 		tree.Model = null;
 		statusbar1.Push (1, "Searching for filename.");
-		var musicListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string), typeof(string),
+		var MovieListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string), typeof(string),
 		                                        typeof(string), typeof(string), typeof(string));
 		var opensub = new OpenSubtitlesClient ();
 		//get the selected language
@@ -136,13 +138,17 @@ public partial class MainWindow : Gtk.Window
 
 		Gtk.TreeIter iter;
 		foreach (OpenSubtitlesClient.SearchResult sub in subtitles) {
-			iter = musicListStore.AppendValues (sub.MovieName, sub.MovieYear, sub.SeriesSeason, sub.SeriesEpisode,sub.SubDownloadsCnt,
-			                                    sub.SubRating, sub.SubDownloadLink);
+			iter = MovieListStore.AppendValues (sub.MovieName, sub.MovieYear, sub.SeriesSeason, sub.SeriesEpisode,sub.SubDownloadsCnt,
+			                                    sub.UserNickName, sub.SubDownloadLink);
 
-			//musicListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
-			//musicListStore.AppendValues (iter, "Language", sub.LanguageName);
+			MovieListStore.AppendValues (iter, "Release name:", sub.MovieReleaseName);
+			if(!string.IsNullOrEmpty(sub.SubAuthorComment))MovieListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
+			if(sub.SubHearingImpaired!="0")MovieListStore.AppendValues (iter, "Hearing Imparied:", sub.SubHearingImpaired);
+			MovieListStore.AppendValues (iter, "Language:",sub.LanguageName);
+			if(sub.SubRating!="0.0")MovieListStore.AppendValues (iter, "Sub Rating:", sub.SubRating);
+			if(sub.MovieImdbRating!="0.0")MovieListStore.AppendValues (iter, "IMDB rating:", sub.MovieImdbRating);
 		}
-		tree.Model = musicListStore;
+		tree.Model = MovieListStore;
 
 	}
 	protected void OnButton2Clicked (object sender, EventArgs e)
@@ -179,5 +185,10 @@ public partial class MainWindow : Gtk.Window
 	protected void combobox2changed (object sender, EventArgs e)
 	{
 		if(!String.IsNullOrEmpty(fname)) GetSubs();
+	}
+
+	protected void MovieTitleSelected (object o, RowActivatedArgs args)
+	{var DetailListStore = new Gtk.TreeStore (typeof (string), typeof(string));
+
 	}
 }

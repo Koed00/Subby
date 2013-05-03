@@ -24,15 +24,17 @@
             <property name="MemberName" />
             <property name="Spacing">6</property>
             <child>
-              <widget class="Gtk.Entry" id="entry2">
+              <widget class="Gtk.ComboBox" id="combobox2">
                 <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="IsEditable">True</property>
-                <property name="InvisibleChar">●</property>
+                <property name="IsTextCombo">True</property>
+                <property name="Items" translatable="yes" />
+                <signal name="Changed" handler="combobox2changed" />
               </widget>
               <packing>
                 <property name="Position">0</property>
                 <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
               </packing>
             </child>
             <child>
@@ -52,18 +54,15 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.ComboBox" id="combobox2">
+              <widget class="Gtk.Entry" id="entry2">
                 <property name="MemberName" />
-                <property name="IsTextCombo">True</property>
-                <property name="Items" translatable="yes" />
-                <signal name="Changed" handler="combobox2changed" />
+                <property name="CanFocus">True</property>
+                <property name="IsEditable">True</property>
+                <property name="InvisibleChar">●</property>
               </widget>
               <packing>
                 <property name="Position">2</property>
                 <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-                <property name="Padding">3</property>
               </packing>
             </child>
           </widget>
@@ -79,10 +78,12 @@
             <property name="MemberName" />
             <property name="ShadowType">In</property>
             <child>
-              <widget class="Gtk.TreeView" id="tree">
+              <widget class="Gtk.NodeView" id="tree">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>
+                <property name="EnableSearch">False</property>
+                <signal name="RowActivated" handler="MovieTitleSelected" />
               </widget>
             </child>
           </widget>
@@ -92,14 +93,16 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
+          <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
             <property name="MemberName" />
+            <property name="CanFocus">True</property>
             <property name="ShadowType">In</property>
             <child>
               <widget class="Gtk.NodeView" id="nodeview1">
                 <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="ShowScrollbars">True</property>
+                <property name="Sensitive">False</property>
+                <property name="EnableSearch">False</property>
+                <property name="HeadersVisible">False</property>
               </widget>
             </child>
           </widget>
