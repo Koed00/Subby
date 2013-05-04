@@ -20,7 +20,7 @@ public partial class MainWindow
 		global::Stetic.Gui.Initialize (this);
 		// Widget MainWindow
 		this.Name = "MainWindow";
-		this.Title = global::Mono.Unix.Catalog.GetString ("Subby");
+		this.Title = "Subby";
 		this.WindowPosition = ((global::Gtk.WindowPosition)(1));
 		this.AllowShrink = true;
 		this.DefaultWidth = 720;
@@ -46,7 +46,7 @@ public partial class MainWindow
 		this.button1.CanFocus = true;
 		this.button1.Name = "button1";
 		this.button1.UseUnderline = true;
-		this.button1.Label = global::Mono.Unix.Catalog.GetString ("Choose File");
+		this.button1.Label = "Choose File";
 		this.hbox1.Add (this.button1);
 		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.button1]));
 		w2.Position = 1;
@@ -110,7 +110,7 @@ public partial class MainWindow
 		this.button2.CanFocus = true;
 		this.button2.Name = "button2";
 		this.button2.UseUnderline = true;
-		this.button2.Label = global::Mono.Unix.Catalog.GetString ("Download");
+		this.button2.Label = "Download";
 		this.hbox3.Add (this.button2);
 		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.button2]));
 		w10.Position = 1;

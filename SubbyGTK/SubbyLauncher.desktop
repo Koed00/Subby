@@ -6,3 +6,4 @@ Name=SubbyLauncher
 Exec=subbygtk
 Terminal=false
 
+Categories=AudioVideo;
