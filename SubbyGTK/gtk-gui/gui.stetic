@@ -38,13 +38,12 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Button" id="button1">
+              <widget class="Gtk.Button" id="FileButton">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Choose File</property>
                 <property name="UseUnderline">True</property>
-                <signal name="Clicked" handler="OnButton1Clicked" />
               </widget>
               <packing>
                 <property name="Position">1</property>
@@ -98,7 +97,6 @@
             <child>
               <widget class="Gtk.NodeView" id="DetailNode">
                 <property name="MemberName" />
-                <property name="Sensitive">False</property>
                 <property name="EnableSearch">False</property>
                 <property name="HeadersVisible">False</property>
               </widget>

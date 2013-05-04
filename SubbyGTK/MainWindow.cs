@@ -17,6 +17,7 @@ public partial class MainWindow : Gtk.Window
 		Build ();
 		languagebox.Changed += new System.EventHandler (LanguageChanged);
 		Downloadbutton.Clicked += new System.EventHandler (DownloadSub);
+		FileButton.Clicked += new System.EventHandler (SelectFile);
 		MovieNodeView.NodeSelection.Changed += new System.EventHandler (OnSelectionChanged);
 		MovieNodeView.AppendColumn ("Title", new Gtk.CellRendererText (), "text", 0);
 		MovieNodeView.AppendColumn ("Year", new Gtk.CellRendererText (), "text", 1);
@@ -24,7 +25,12 @@ public partial class MainWindow : Gtk.Window
 		MovieNodeView.AppendColumn ("Episode", new Gtk.CellRendererText (), "text", 3);
 		MovieNodeView.AppendColumn ("Uploader", new Gtk.CellRendererText (), "text", 4);
 		MovieNodeView.AppendColumn ("Downloads", new Gtk.CellRendererText (), "text", 5);
+		DetailNode.AppendColumn("",new Gtk.CellRendererText (), "text", 0);
+		DetailNode.AppendColumn("",new Gtk.CellRendererText (), "text", 1);
 		MovieNodeView.ShowAll ();
+		DetailNode.ShowAll ();
+
+
 
 
 	}
@@ -50,10 +56,32 @@ public partial class MainWindow : Gtk.Window
 
 		[Gtk.TreeNodeValue (Column=5)]
 		public string Downloads { get; set; }
-
+		public string SubRating { get; set; }
+		public string IMDBRating { get; set; }
+		public string Lang { get; set; }
 		public string DownloadLink { get; set; }
+		public string SubFormat {get;set;}
+		public bool SubHearingImpaired{ get; set; }
+		public string AuthorCommments{ get; set; }
+		public string Language{ get; set; }
+		public string SubAddDate {get;set;}
+		public string ReleaseName{ get; set; }
 	}
 
+	[Gtk.TreeNode (ListOnly=true)]
+	public class DetailTreeNode : Gtk.TreeNode
+	{
+		public DetailTreeNode(string name, string value){
+			Name=name;
+			Value=value;
+		}
+		[Gtk.TreeNodeValue (Column=0)]
+		public string Name{ get; set; }
+
+		[Gtk.TreeNodeValue (Column=1)]
+		public string Value { get; set; }
+
+	}
 	public void PushStatus (uint i, string statustext)
 	{
 		statusbar1.Push (i, statustext);
@@ -79,7 +107,7 @@ public partial class MainWindow : Gtk.Window
 		a.RetVal = true;
 	}
 
-	protected void OnButton1Clicked (object sender, EventArgs e)
+	protected void SelectFile (object sender, EventArgs e)
 	{
 		var chooser = new FileChooserDialog (
 			"Please select movie...",
@@ -140,18 +168,26 @@ public partial class MainWindow : Gtk.Window
 				node.Uploader = sub.UserNickName;
 				node.Downloads = sub.SubDownloadsCnt;
 				node.DownloadLink = sub.SubDownloadLink;
+				node.AuthorCommments = sub.SubAuthorComment;
+				node.SubAddDate = sub.SubAddDate.ToShortDateString();
+				node.ReleaseName = sub.MovieReleaseName;
+				node.IMDBRating = sub.MovieImdbRating;
+				node.SubRating = sub.SubRating;
+				node.Lang = sub.SubLanguageID;
+				node.Language = sub.LanguageName;
+				node.SubFormat = sub.SubFormat;
+				node.SubHearingImpaired=sub.SubHearingImpaired=="1";
 				store.AddNode (node);
 
 			}
 		}
-//			MovieListStore.AppendValues (iter, "Release name:", sub.MovieReleaseName);
-//			if(!string.IsNullOrEmpty(sub.SubAuthorComment))MovieListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
-//			if(sub.SubHearingImpaired!="0")MovieListStore.AppendValues (iter, "Hearing Imparied:", sub.SubHearingImpaired);
-//			MovieListStore.AppendValues (iter, "Language:",sub.LanguageName);
-//			if(sub.SubRating!="0.0")MovieListStore.AppendValues (iter, "Sub Rating:", sub.SubRating);
-//			if(sub.MovieImdbRating!="0.0")MovieListStore.AppendValues (iter, "IMDB rating:", sub.MovieImdbRating);
+
 		MovieNodeView.NodeStore = store;
+		DetailNode.NodeStore = null;
 		MovieNodeView.ShowAll ();
+		DetailNode.ShowAll ();
+
+		//TODO show details of first result
 
 	}
 
@@ -177,7 +213,7 @@ public partial class MainWindow : Gtk.Window
 		}
 		fileToDecompress.Delete ();
 		string origlocation = System.IO.Path.GetDirectoryName (fname);
-		string newfile = origlocation + "/" + movietitle + ".srt"; //TODO add actual extension type
+		string newfile = origlocation + "/" + movietitle + "."+selectednode.SubFormat; //TODO add actual extension type
 		if (File.Exists (newfile)) {
 			File.Delete (newfile);
 		} //TODO: ask for overwrite?
@@ -197,7 +233,18 @@ public partial class MainWindow : Gtk.Window
 		var selectednode = (MovieTreeNode)MovieNodeView.NodeSelection.SelectedNode;
 		if (selectednode == null)
 			return;
+		var store = new Gtk.NodeStore (typeof(DetailTreeNode));
+		store.AddNode(new DetailTreeNode("Added:", selectednode.SubAddDate));
+		store.AddNode (new DetailTreeNode ("Release:", selectednode.ReleaseName));
+		store.AddNode(new DetailTreeNode("Comments:", selectednode.AuthorCommments));
+		store.AddNode(new DetailTreeNode("Language:", selectednode.Language));
+		store.AddNode(new DetailTreeNode("Rating:", selectednode.SubRating));
+		store.AddNode(new DetailTreeNode("IMDB:", selectednode.IMDBRating));
+		store.AddNode (new DetailTreeNode ("Format:", selectednode.SubFormat));
+		store.AddNode (new DetailTreeNode ("HearingImpaired:", selectednode.SubHearingImpaired.ToString ()));
 
+			DetailNode.NodeStore = store;
+			DetailNode.ShowAll ();
 
 	}
 }

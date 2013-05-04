@@ -5,7 +5,7 @@ public partial class MainWindow
 	private global::Gtk.VBox vbox1;
 	private global::Gtk.HBox hbox1;
 	private global::Gtk.ComboBox languagebox;
-	private global::Gtk.Button button1;
+	private global::Gtk.Button FileButton;
 	private global::Gtk.Entry entry2;
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
 	private global::Gtk.NodeView MovieNodeView;
@@ -42,13 +42,13 @@ public partial class MainWindow
 		w1.Expand = false;
 		w1.Fill = false;
 		// Container child hbox1.Gtk.Box+BoxChild
-		this.button1 = new global::Gtk.Button ();
-		this.button1.CanFocus = true;
-		this.button1.Name = "button1";
-		this.button1.UseUnderline = true;
-		this.button1.Label = "Choose File";
-		this.hbox1.Add (this.button1);
-		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.button1]));
+		this.FileButton = new global::Gtk.Button ();
+		this.FileButton.CanFocus = true;
+		this.FileButton.Name = "FileButton";
+		this.FileButton.UseUnderline = true;
+		this.FileButton.Label = "Choose File";
+		this.hbox1.Add (this.FileButton);
+		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.FileButton]));
 		w2.Position = 1;
 		w2.Expand = false;
 		w2.Fill = false;
@@ -85,7 +85,6 @@ public partial class MainWindow
 		this.scrolledwindow1.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child scrolledwindow1.Gtk.Container+ContainerChild
 		this.DetailNode = new global::Gtk.NodeView ();
-		this.DetailNode.Sensitive = false;
 		this.DetailNode.Name = "DetailNode";
 		this.DetailNode.EnableSearch = false;
 		this.DetailNode.HeadersVisible = false;
@@ -126,6 +125,5 @@ public partial class MainWindow
 		}
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
-		this.button1.Clicked += new global::System.EventHandler (this.OnButton1Clicked);
 	}
 }
