@@ -4,16 +4,16 @@ public partial class MainWindow
 {
 	private global::Gtk.VBox vbox1;
 	private global::Gtk.HBox hbox1;
-	private global::Gtk.ComboBox combobox2;
+	private global::Gtk.ComboBox languagebox;
 	private global::Gtk.Button button1;
 	private global::Gtk.Entry entry2;
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
-	private global::Gtk.NodeView tree;
+	private global::Gtk.NodeView MovieNodeView;
 	private global::Gtk.ScrolledWindow scrolledwindow1;
-	private global::Gtk.NodeView nodeview1;
+	private global::Gtk.NodeView DetailNode;
 	private global::Gtk.HBox hbox3;
 	private global::Gtk.Statusbar statusbar1;
-	private global::Gtk.Button button2;
+	private global::Gtk.Button Downloadbutton;
 
 	protected virtual void Build ()
 	{
@@ -34,10 +34,10 @@ public partial class MainWindow
 		this.hbox1.Name = "hbox1";
 		this.hbox1.Spacing = 6;
 		// Container child hbox1.Gtk.Box+BoxChild
-		this.combobox2 = global::Gtk.ComboBox.NewText ();
-		this.combobox2.Name = "combobox2";
-		this.hbox1.Add (this.combobox2);
-		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.combobox2]));
+		this.languagebox = global::Gtk.ComboBox.NewText ();
+		this.languagebox.Name = "languagebox";
+		this.hbox1.Add (this.languagebox);
+		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.languagebox]));
 		w1.Position = 0;
 		w1.Expand = false;
 		w1.Fill = false;
@@ -71,11 +71,10 @@ public partial class MainWindow
 		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-		this.tree = new global::Gtk.NodeView ();
-		this.tree.CanFocus = true;
-		this.tree.Name = "tree";
-		this.tree.EnableSearch = false;
-		this.GtkScrolledWindow.Add (this.tree);
+		this.MovieNodeView = new global::Gtk.NodeView ();
+		this.MovieNodeView.CanFocus = true;
+		this.MovieNodeView.Name = "MovieNodeView";
+		this.GtkScrolledWindow.Add (this.MovieNodeView);
 		this.vbox1.Add (this.GtkScrolledWindow);
 		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.GtkScrolledWindow]));
 		w6.Position = 1;
@@ -85,12 +84,12 @@ public partial class MainWindow
 		this.scrolledwindow1.Name = "scrolledwindow1";
 		this.scrolledwindow1.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child scrolledwindow1.Gtk.Container+ContainerChild
-		this.nodeview1 = new global::Gtk.NodeView ();
-		this.nodeview1.Sensitive = false;
-		this.nodeview1.Name = "nodeview1";
-		this.nodeview1.EnableSearch = false;
-		this.nodeview1.HeadersVisible = false;
-		this.scrolledwindow1.Add (this.nodeview1);
+		this.DetailNode = new global::Gtk.NodeView ();
+		this.DetailNode.Sensitive = false;
+		this.DetailNode.Name = "DetailNode";
+		this.DetailNode.EnableSearch = false;
+		this.DetailNode.HeadersVisible = false;
+		this.scrolledwindow1.Add (this.DetailNode);
 		this.vbox1.Add (this.scrolledwindow1);
 		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.scrolledwindow1]));
 		w8.Position = 2;
@@ -106,13 +105,13 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.statusbar1]));
 		w9.Position = 0;
 		// Container child hbox3.Gtk.Box+BoxChild
-		this.button2 = new global::Gtk.Button ();
-		this.button2.CanFocus = true;
-		this.button2.Name = "button2";
-		this.button2.UseUnderline = true;
-		this.button2.Label = "Download";
-		this.hbox3.Add (this.button2);
-		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.button2]));
+		this.Downloadbutton = new global::Gtk.Button ();
+		this.Downloadbutton.CanFocus = true;
+		this.Downloadbutton.Name = "Downloadbutton";
+		this.Downloadbutton.UseUnderline = true;
+		this.Downloadbutton.Label = "Download";
+		this.hbox3.Add (this.Downloadbutton);
+		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.Downloadbutton]));
 		w10.Position = 1;
 		w10.Expand = false;
 		w10.Fill = false;
@@ -127,9 +126,6 @@ public partial class MainWindow
 		}
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
-		this.combobox2.Changed += new global::System.EventHandler (this.combobox2changed);
 		this.button1.Clicked += new global::System.EventHandler (this.OnButton1Clicked);
-		this.tree.RowActivated += new global::Gtk.RowActivatedHandler (this.MovieTitleSelected);
-		this.button2.Clicked += new global::System.EventHandler (this.OnButton2Clicked);
 	}
 }

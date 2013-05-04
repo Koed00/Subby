@@ -10,72 +10,66 @@ using SubbyGTK;
 public partial class MainWindow : Gtk.Window
 {
 	private string fname = string.Empty;
+	private List<OpenSubtitlesClient.SearchResult> subtitles = new  List<OpenSubtitlesClient.SearchResult> ();
 
 	public MainWindow () : base(Gtk.WindowType.Toplevel)
 	{
 		Build ();
-		var movieColumn = new Gtk.TreeViewColumn ();
-		movieColumn.Title = "Title";
-		var movieNameCell = new Gtk.CellRendererText ();
-		movieColumn.PackStart (movieNameCell, true);
-
-		var yearColumn = new Gtk.TreeViewColumn ();
-		yearColumn.Title = "Year";
-		var yearTitleCell = new Gtk.CellRendererText ();
-		yearColumn.PackStart (yearTitleCell, true);
-
-		var seasonColumn = new Gtk.TreeViewColumn ();
-		seasonColumn.Title = "Season";
-		var seasonTitleCell = new Gtk.CellRendererText ();
-		seasonColumn.PackStart (seasonTitleCell, true);
-
-		var episodeColumn = new Gtk.TreeViewColumn ();
-		episodeColumn.Title = "Episode";
-		var episodeTitleCell = new Gtk.CellRendererText ();
-		episodeColumn.PackStart (episodeTitleCell, true);
-
-		var ratingColumn = new Gtk.TreeViewColumn ();
-		ratingColumn.Title = "Uploader";
-		var ratingTitleCell = new Gtk.CellRendererText ();
-		ratingColumn.PackStart (ratingTitleCell, true);
-
-		var downloadsColumn = new Gtk.TreeViewColumn ();
-		downloadsColumn.Title = "Downloads";
-		var downloadsTitleCell = new Gtk.CellRendererText ();
-		downloadsColumn.PackStart (downloadsTitleCell, true);
-
-		tree.AppendColumn (movieColumn);
-		tree.AppendColumn (yearColumn);
-		tree.AppendColumn (seasonColumn);
-		tree.AppendColumn (episodeColumn);
-		tree.AppendColumn (downloadsColumn);
-		tree.AppendColumn (ratingColumn);
-
-		movieColumn.AddAttribute (movieNameCell, "text", 0);
-		yearColumn.AddAttribute (yearTitleCell, "text", 1);
-		seasonColumn.AddAttribute (seasonTitleCell, "text", 2);
-		episodeColumn.AddAttribute (episodeTitleCell, "text", 3);
-		downloadsColumn.AddAttribute (downloadsTitleCell, "text", 4);
-		ratingColumn.AddAttribute (ratingTitleCell, "text", 5);
+		languagebox.Changed += new System.EventHandler (LanguageChanged);
+		Downloadbutton.Clicked += new System.EventHandler (DownloadSub);
+		MovieNodeView.NodeSelection.Changed += new System.EventHandler (OnSelectionChanged);
+		MovieNodeView.AppendColumn ("Title", new Gtk.CellRendererText (), "text", 0);
+		MovieNodeView.AppendColumn ("Year", new Gtk.CellRendererText (), "text", 1);
+		MovieNodeView.AppendColumn ("Season", new Gtk.CellRendererText (), "text", 2);
+		MovieNodeView.AppendColumn ("Episode", new Gtk.CellRendererText (), "text", 3);
+		MovieNodeView.AppendColumn ("Uploader", new Gtk.CellRendererText (), "text", 4);
+		MovieNodeView.AppendColumn ("Downloads", new Gtk.CellRendererText (), "text", 5);
+		MovieNodeView.ShowAll ();
 
 
+	}
+
+	[Gtk.TreeNode (ListOnly=true)]
+	public class MovieTreeNode : Gtk.TreeNode
+	{
+
+		[Gtk.TreeNodeValue (Column=0)]
+		public string Title{ get; set; }
+
+		[Gtk.TreeNodeValue (Column=1)]
+		public string Year { get; set; }
+
+		[Gtk.TreeNodeValue (Column=2)]
+		public string Season { get; set; }
+
+		[Gtk.TreeNodeValue (Column=3)]
+		public string Episode { get; set; }
+
+		[Gtk.TreeNodeValue (Column=4)]
+		public string Uploader { get; set; }
+
+		[Gtk.TreeNodeValue (Column=5)]
+		public string Downloads { get; set; }
+
+		public string DownloadLink { get; set; }
 	}
 
 	public void PushStatus (uint i, string statustext)
 	{
 		statusbar1.Push (i, statustext);
+
 	}
 
 	public void PopulateLanguages (string deflang)
 	{
 		var opensub = new OpenSubtitlesClient ();
 		ArrayList langs = opensub.GetSubLanguages ();
-		var langstore = new Gtk.ListStore (typeof (string), typeof(string));
+		var langstore = new Gtk.ListStore (typeof(string), typeof(string));
 		langstore.AppendValues ("All", "all");
 		foreach (Hashtable lang in langs) {
-			langstore.AppendValues (lang["LanguageName"].ToString(), (lang ["SubLanguageID"] ?? string.Empty).ToString ());
+			langstore.AppendValues (lang ["LanguageName"].ToString (), (lang ["SubLanguageID"] ?? string.Empty).ToString ());
 		}
-		combobox2.Model = langstore;
+		languagebox.Model = langstore;
 		statusbar1.Push (4, "Ready.");
 	}
 
@@ -118,48 +112,58 @@ public partial class MainWindow : Gtk.Window
 	
 	}
 
-	private void GetSubs(){
-		tree.Model = null;
+	private void GetSubs ()
+	{
+		var store = new Gtk.NodeStore (typeof(MovieTreeNode));
 		statusbar1.Push (1, "Searching for filename.");
-		var MovieListStore = new Gtk.TreeStore (typeof (string), typeof(string), typeof(string), typeof(string),
-		                                        typeof(string), typeof(string), typeof(string));
 		var opensub = new OpenSubtitlesClient ();
 		//get the selected language
 		//TODO get last selected language from prefs
-		var model = combobox2.Model;
+		var model = languagebox.Model;
 		TreeIter itar;
 		string lang;
-		if(combobox2.GetActiveIter(out itar)) lang =(string)combobox2.Model.GetValue (itar,1);
-		else{lang = "all";}
-		//TODO save selected language to prefs
-		List<OpenSubtitlesClient.SearchResult> subtitles = opensub.FileSearch (fname,lang);
-		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
-		if(subtitles.Count==0) return;
-
-		Gtk.TreeIter iter;
-		foreach (OpenSubtitlesClient.SearchResult sub in subtitles) {
-			iter = MovieListStore.AppendValues (sub.MovieName, sub.MovieYear, sub.SeriesSeason, sub.SeriesEpisode,sub.SubDownloadsCnt,
-			                                    sub.UserNickName, sub.SubDownloadLink);
-
-			MovieListStore.AppendValues (iter, "Release name:", sub.MovieReleaseName);
-			if(!string.IsNullOrEmpty(sub.SubAuthorComment))MovieListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
-			if(sub.SubHearingImpaired!="0")MovieListStore.AppendValues (iter, "Hearing Imparied:", sub.SubHearingImpaired);
-			MovieListStore.AppendValues (iter, "Language:",sub.LanguageName);
-			if(sub.SubRating!="0.0")MovieListStore.AppendValues (iter, "Sub Rating:", sub.SubRating);
-			if(sub.MovieImdbRating!="0.0")MovieListStore.AppendValues (iter, "IMDB rating:", sub.MovieImdbRating);
+		if (languagebox.GetActiveIter (out itar))
+			lang = (string)languagebox.Model.GetValue (itar, 1);
+		else {
+			lang = "all";
 		}
-		tree.Model = MovieListStore;
+		//TODO save selected language to prefs
+		subtitles = opensub.FileSearch (fname, lang);
+		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
+		if (subtitles.Count > 0) {					
+			foreach (OpenSubtitlesClient.SearchResult sub in subtitles) {
+				var node = new MovieTreeNode ();
+				node.Title = sub.MovieName;
+				node.Year = sub.MovieYear;
+				node.Season = sub.SeriesSeason;
+				node.Episode = sub.SeriesEpisode;
+				node.Uploader = sub.UserNickName;
+				node.Downloads = sub.SubDownloadsCnt;
+				node.DownloadLink = sub.SubDownloadLink;
+				store.AddNode (node);
+
+			}
+		}
+//			MovieListStore.AppendValues (iter, "Release name:", sub.MovieReleaseName);
+//			if(!string.IsNullOrEmpty(sub.SubAuthorComment))MovieListStore.AppendValues (iter, "Author Comment:", sub.SubAuthorComment);
+//			if(sub.SubHearingImpaired!="0")MovieListStore.AppendValues (iter, "Hearing Imparied:", sub.SubHearingImpaired);
+//			MovieListStore.AppendValues (iter, "Language:",sub.LanguageName);
+//			if(sub.SubRating!="0.0")MovieListStore.AppendValues (iter, "Sub Rating:", sub.SubRating);
+//			if(sub.MovieImdbRating!="0.0")MovieListStore.AppendValues (iter, "IMDB rating:", sub.MovieImdbRating);
+		MovieNodeView.NodeStore = store;
+		MovieNodeView.ShowAll ();
 
 	}
-	protected void OnButton2Clicked (object sender, EventArgs e)
-	{
-		TreeIter iter;
-		tree.Selection.GetSelected (out iter);
-		var downloadlinkg = (string)tree.Model.GetValue (iter, 6);
+
+	protected void DownloadSub (object sender, EventArgs e)
+	{		 
+		var selectednode = (MovieTreeNode)MovieNodeView.NodeSelection.SelectedNode;		
+		if (selectednode == null)
+			return;
 		string movietitle = System.IO.Path.GetFileNameWithoutExtension (fname);
 		var Client = new WebClient ();
 		string filename = "/tmp/tmp_" + movietitle + ".gz";
-		Client.DownloadFile (downloadlinkg, filename);
+		Client.DownloadFile (selectednode.DownloadLink, filename);
 		var fileToDecompress = new FileInfo (filename);
 		string currentFileName = fileToDecompress.FullName;
 		string newFileName = currentFileName.Remove (currentFileName.Length - fileToDecompress.Extension.Length);
@@ -182,13 +186,18 @@ public partial class MainWindow : Gtk.Window
 		statusbar1.Push (3, "Downloaded " + newfile + ".");
 	}
 
-	protected void combobox2changed (object sender, EventArgs e)
+	protected void LanguageChanged (object sender, EventArgs e)
 	{
-		if(!String.IsNullOrEmpty(fname)) GetSubs();
+		if (!String.IsNullOrEmpty (fname))
+			GetSubs ();
 	}
 
-	protected void MovieTitleSelected (object o, RowActivatedArgs args)
-	{var DetailListStore = new Gtk.TreeStore (typeof (string), typeof(string));
+	protected void OnSelectionChanged (object sender, EventArgs e)
+	{
+		var selectednode = (MovieTreeNode)MovieNodeView.NodeSelection.SelectedNode;
+		if (selectednode == null)
+			return;
+
 
 	}
 }
