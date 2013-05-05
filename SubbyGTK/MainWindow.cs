@@ -122,7 +122,7 @@ public partial class MainWindow : Gtk.Window
 		var langstore = new Gtk.ListStore (typeof(string), typeof(string));
 		langstore.AppendValues ("All", "all");
 		int defrow=0;
-		int i = 0;
+		int i = 1;
 		foreach (Hashtable lang in langs) {
 			langstore.AppendValues (lang ["LanguageName"].ToString (), (lang ["SubLanguageID"] ?? string.Empty).ToString ());
 			if (lang.ContainsValue (deflang))
