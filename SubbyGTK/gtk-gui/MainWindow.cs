@@ -113,8 +113,7 @@ public partial class MainWindow
 		this.Downloadbutton.Add (w8);
 		this.hbox1.Add (this.Downloadbutton);
 		global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.Downloadbutton]));
-		w16.Position = 2;
-		w16.Expand = false;
+		w16.Position = 1;
 		w16.Fill = false;
 		this.vbox3.Add (this.hbox1);
 		global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.hbox1]));
