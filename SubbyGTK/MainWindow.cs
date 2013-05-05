@@ -120,6 +120,7 @@ public partial class MainWindow : Gtk.Window
 		var opensub = new OpenSubtitlesClient ();
 		ArrayList langs = opensub.GetSubLanguages ();
 		var langstore = new Gtk.ListStore (typeof(string), typeof(string));
+		langstore.AppendValues ("All", "all");
 		int defrow=0;
 		int i = 0;
 		foreach (Hashtable lang in langs) {
