@@ -12,10 +12,11 @@ namespace SubbyGTK
 		{
 			Application.Init ();
 			MainWindow win = new MainWindow ();
-			win.PopulateLanguages (ConfigurationManager.AppSettings["sublanguage"].ToString());
+			win.PopulateLanguages ();
 			win.Show ();
 			Application.Run ();
 			//setup node
+
 	
 		}
 

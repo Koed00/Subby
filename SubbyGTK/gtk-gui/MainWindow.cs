@@ -3,17 +3,19 @@
 public partial class MainWindow
 {
 	private global::Gtk.VBox vbox1;
-	private global::Gtk.HBox hbox1;
-	private global::Gtk.ComboBox languagebox;
-	private global::Gtk.Button FileButton;
-	private global::Gtk.Entry entry2;
+	private global::Gtk.HBox hbox3;
+	private global::Gtk.VBox vbox3;
+	private global::Gtk.FileChooserButton FileChooserD;
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
 	private global::Gtk.NodeView MovieNodeView;
-	private global::Gtk.ScrolledWindow scrolledwindow1;
+	private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 	private global::Gtk.NodeView DetailNode;
-	private global::Gtk.HBox hbox3;
-	private global::Gtk.Statusbar statusbar1;
+	private global::Gtk.VBox vbox4;
+	private global::Gtk.ComboBox languagebox;
+	private global::Gtk.VButtonBox vbuttonbox3;
 	private global::Gtk.Button Downloadbutton;
+	private global::Gtk.Image image19;
+	private global::Gtk.Statusbar statusbar1;
 
 	protected virtual void Build ()
 	{
@@ -22,6 +24,7 @@ public partial class MainWindow
 		this.Name = "MainWindow";
 		this.Title = "Subby";
 		this.WindowPosition = ((global::Gtk.WindowPosition)(1));
+		this.BorderWidth = ((uint)(2));
 		this.AllowShrink = true;
 		this.DefaultWidth = 720;
 		this.DefaultHeight = 480;
@@ -30,43 +33,23 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.hbox1 = new global::Gtk.HBox ();
-		this.hbox1.Name = "hbox1";
-		this.hbox1.Spacing = 6;
-		// Container child hbox1.Gtk.Box+BoxChild
-		this.languagebox = global::Gtk.ComboBox.NewText ();
-		this.languagebox.Name = "languagebox";
-		this.hbox1.Add (this.languagebox);
-		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.languagebox]));
+		this.hbox3 = new global::Gtk.HBox ();
+		this.hbox3.Name = "hbox3";
+		this.hbox3.Spacing = 6;
+		// Container child hbox3.Gtk.Box+BoxChild
+		this.vbox3 = new global::Gtk.VBox ();
+		this.vbox3.Name = "vbox3";
+		this.vbox3.Spacing = 6;
+		// Container child vbox3.Gtk.Box+BoxChild
+		this.FileChooserD = new global::Gtk.FileChooserButton ("Select a File", ((global::Gtk.FileChooserAction)(0)));
+		this.FileChooserD.Name = "FileChooserD";
+		this.FileChooserD.LocalOnly = false;
+		this.vbox3.Add (this.FileChooserD);
+		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.FileChooserD]));
 		w1.Position = 0;
 		w1.Expand = false;
 		w1.Fill = false;
-		// Container child hbox1.Gtk.Box+BoxChild
-		this.FileButton = new global::Gtk.Button ();
-		this.FileButton.CanFocus = true;
-		this.FileButton.Name = "FileButton";
-		this.FileButton.UseUnderline = true;
-		this.FileButton.Label = "Choose File";
-		this.hbox1.Add (this.FileButton);
-		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.FileButton]));
-		w2.Position = 1;
-		w2.Expand = false;
-		w2.Fill = false;
-		// Container child hbox1.Gtk.Box+BoxChild
-		this.entry2 = new global::Gtk.Entry ();
-		this.entry2.CanFocus = true;
-		this.entry2.Name = "entry2";
-		this.entry2.IsEditable = true;
-		this.entry2.InvisibleChar = '●';
-		this.hbox1.Add (this.entry2);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.entry2]));
-		w3.Position = 2;
-		this.vbox1.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox1]));
-		w4.Position = 0;
-		w4.Expand = false;
-		w4.Fill = false;
-		// Container child vbox1.Gtk.Box+BoxChild
+		// Container child vbox3.Gtk.Box+BoxChild
 		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
@@ -75,54 +58,100 @@ public partial class MainWindow
 		this.MovieNodeView.CanFocus = true;
 		this.MovieNodeView.Name = "MovieNodeView";
 		this.GtkScrolledWindow.Add (this.MovieNodeView);
-		this.vbox1.Add (this.GtkScrolledWindow);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.GtkScrolledWindow]));
-		w6.Position = 1;
-		// Container child vbox1.Gtk.Box+BoxChild
-		this.scrolledwindow1 = new global::Gtk.ScrolledWindow ();
-		this.scrolledwindow1.CanFocus = true;
-		this.scrolledwindow1.Name = "scrolledwindow1";
-		this.scrolledwindow1.ShadowType = ((global::Gtk.ShadowType)(1));
-		// Container child scrolledwindow1.Gtk.Container+ContainerChild
+		this.vbox3.Add (this.GtkScrolledWindow);
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.GtkScrolledWindow]));
+		w3.Position = 1;
+		// Container child vbox3.Gtk.Box+BoxChild
+		this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow ();
+		this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+		this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
 		this.DetailNode = new global::Gtk.NodeView ();
+		this.DetailNode.CanFocus = true;
 		this.DetailNode.Name = "DetailNode";
-		this.DetailNode.EnableSearch = false;
-		this.DetailNode.HeadersVisible = false;
-		this.scrolledwindow1.Add (this.DetailNode);
-		this.vbox1.Add (this.scrolledwindow1);
-		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.scrolledwindow1]));
-		w8.Position = 2;
-		// Container child vbox1.Gtk.Box+BoxChild
-		this.hbox3 = new global::Gtk.HBox ();
-		this.hbox3.Name = "hbox3";
-		this.hbox3.Spacing = 6;
+		this.GtkScrolledWindow1.Add (this.DetailNode);
+		this.vbox3.Add (this.GtkScrolledWindow1);
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.GtkScrolledWindow1]));
+		w5.Position = 2;
+		this.hbox3.Add (this.vbox3);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.vbox3]));
+		w6.Position = 0;
 		// Container child hbox3.Gtk.Box+BoxChild
-		this.statusbar1 = new global::Gtk.Statusbar ();
-		this.statusbar1.Name = "statusbar1";
-		this.statusbar1.Spacing = 6;
-		this.hbox3.Add (this.statusbar1);
-		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.statusbar1]));
-		w9.Position = 0;
-		// Container child hbox3.Gtk.Box+BoxChild
+		this.vbox4 = new global::Gtk.VBox ();
+		this.vbox4.Name = "vbox4";
+		this.vbox4.Spacing = 6;
+		// Container child vbox4.Gtk.Box+BoxChild
+		this.languagebox = global::Gtk.ComboBox.NewText ();
+		this.languagebox.CanDefault = true;
+		this.languagebox.Name = "languagebox";
+		this.vbox4.Add (this.languagebox);
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.languagebox]));
+		w7.Position = 0;
+		w7.Expand = false;
+		w7.Fill = false;
+		// Container child vbox4.Gtk.Box+BoxChild
+		this.vbuttonbox3 = new global::Gtk.VButtonBox ();
+		this.vbuttonbox3.Name = "vbuttonbox3";
+		this.vbuttonbox3.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(3));
+		// Container child vbuttonbox3.Gtk.ButtonBox+ButtonBoxChild
 		this.Downloadbutton = new global::Gtk.Button ();
 		this.Downloadbutton.CanFocus = true;
 		this.Downloadbutton.Name = "Downloadbutton";
 		this.Downloadbutton.UseUnderline = true;
-		this.Downloadbutton.Label = "Download";
-		this.hbox3.Add (this.Downloadbutton);
-		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.Downloadbutton]));
-		w10.Position = 1;
-		w10.Expand = false;
-		w10.Fill = false;
+		// Container child Downloadbutton.Gtk.Container+ContainerChild
+		global::Gtk.Alignment w8 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
+		// Container child GtkAlignment.Gtk.Container+ContainerChild
+		global::Gtk.HBox w9 = new global::Gtk.HBox ();
+		w9.Spacing = 2;
+		// Container child GtkHBox.Gtk.Container+ContainerChild
+		global::Gtk.Image w10 = new global::Gtk.Image ();
+		w10.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-save", global::Gtk.IconSize.Button);
+		w9.Add (w10);
+		// Container child GtkHBox.Gtk.Container+ContainerChild
+		global::Gtk.Label w12 = new global::Gtk.Label ();
+		w12.LabelProp = "Download";
+		w12.UseUnderline = true;
+		w9.Add (w12);
+		w8.Add (w9);
+		this.Downloadbutton.Add (w8);
+		this.vbuttonbox3.Add (this.Downloadbutton);
+		global::Gtk.ButtonBox.ButtonBoxChild w16 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.vbuttonbox3 [this.Downloadbutton]));
+		w16.Expand = false;
+		w16.Fill = false;
+		this.vbox4.Add (this.vbuttonbox3);
+		global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.vbuttonbox3]));
+		w17.Position = 1;
+		// Container child vbox4.Gtk.Box+BoxChild
+		this.image19 = new global::Gtk.Image ();
+		this.image19.Name = "image19";
+		this.vbox4.Add (this.image19);
+		global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.image19]));
+		w18.PackType = ((global::Gtk.PackType)(1));
+		w18.Position = 2;
+		w18.Expand = false;
+		w18.Fill = false;
+		this.hbox3.Add (this.vbox4);
+		global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.vbox4]));
+		w19.Position = 1;
+		w19.Expand = false;
+		w19.Fill = false;
 		this.vbox1.Add (this.hbox3);
-		global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox3]));
-		w11.Position = 3;
-		w11.Expand = false;
-		w11.Fill = false;
+		global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox3]));
+		w20.Position = 0;
+		// Container child vbox1.Gtk.Box+BoxChild
+		this.statusbar1 = new global::Gtk.Statusbar ();
+		this.statusbar1.Name = "statusbar1";
+		this.statusbar1.Spacing = 6;
+		this.vbox1.Add (this.statusbar1);
+		global::Gtk.Box.BoxChild w21 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.statusbar1]));
+		w21.Position = 1;
+		w21.Expand = false;
+		w21.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
+		this.languagebox.HasDefault = true;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 	}
