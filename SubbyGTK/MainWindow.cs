@@ -72,6 +72,7 @@ public partial class MainWindow : Gtk.Window
 		public string SubRating { get; set; }
 
 		public string IMDBRating { get; set; }
+		public string IDMovieImdb{ get; set; }
 
 		public string Lang { get; set; }
 
@@ -182,6 +183,7 @@ public partial class MainWindow : Gtk.Window
 				node.Language = sub.LanguageName;
 				node.SubFormat = sub.SubFormat;
 				node.SubHearingImpaired = sub.SubHearingImpaired == "1";
+				node.IDMovieImdb=sub.IDMovieImdb;
 				store.AddNode (node);
 
 			}
