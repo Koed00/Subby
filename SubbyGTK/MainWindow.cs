@@ -131,7 +131,13 @@ public partial class MainWindow : Window
         MovieNodeView.ShowAll();
         DetailNode.ShowAll();
 
-        //TODO show details of first result
+        //TODO show details of first result;
+		TreeIter it;
+		if (MovieNodeView.Model.GetIterFirst (out it)) {
+			MovieNodeView.Selection.SelectIter(it);
+			SetDetailView ();
+		}
+	
     }
 
     protected void DownloadSub(object sender, EventArgs e)
@@ -188,22 +194,27 @@ public partial class MainWindow : Window
 
     protected void OnSelectionChanged(object sender, EventArgs e)
     {
-        var selectednode = (MovieTreeNode) MovieNodeView.NodeSelection.SelectedNode;
-        if (selectednode == null)
-            return;
-        var store = new NodeStore(typeof (DetailTreeNode));
-        store.AddNode(new DetailTreeNode("Added:", selectednode.SubAddDate));
-        store.AddNode(new DetailTreeNode("Release:", selectednode.ReleaseName));
-        store.AddNode(new DetailTreeNode("Comments:", selectednode.AuthorCommments));
-        store.AddNode(new DetailTreeNode("Language:", selectednode.Language));
-        store.AddNode(new DetailTreeNode("Rating:", selectednode.SubRating));
-        store.AddNode(new DetailTreeNode("IMDB:", selectednode.IMDBRating));
-        store.AddNode(new DetailTreeNode("Format:", selectednode.SubFormat));
-        store.AddNode(new DetailTreeNode("HearingImpaired:", selectednode.SubHearingImpaired.ToString()));
-
-        DetailNode.NodeStore = store;
-        DetailNode.ShowAll();
+			SetDetailView ();
     }
+
+	private void SetDetailView(){
+		var selectednode=(MovieTreeNode)MovieNodeView.NodeSelection.SelectedNode;
+		if (selectednode == null)
+			return;
+		var store = new NodeStore(typeof (DetailTreeNode));
+		store.AddNode(new DetailTreeNode("Added:", selectednode.SubAddDate));
+		store.AddNode(new DetailTreeNode("Release:", selectednode.ReleaseName));
+		store.AddNode(new DetailTreeNode("Comments:", selectednode.AuthorCommments));
+		store.AddNode(new DetailTreeNode("Language:", selectednode.Language));
+		store.AddNode(new DetailTreeNode("Rating:", selectednode.SubRating));
+		store.AddNode(new DetailTreeNode("IMDB:", selectednode.IMDBRating));
+		store.AddNode(new DetailTreeNode("Format:", selectednode.SubFormat));
+		store.AddNode(new DetailTreeNode("HearingImpaired:", selectednode.SubHearingImpaired.ToString()));
+
+		DetailNode.NodeStore = store;
+		DetailNode.ShowAll ();
+
+	}
 
     public int ShowError(string message)
     {
