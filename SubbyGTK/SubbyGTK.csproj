@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Tmdb.org.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

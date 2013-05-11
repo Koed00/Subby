@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SubbyGTK.XmlRpc;
+using System.Net;
 
 namespace SubbyGTK
 {
@@ -15,7 +16,21 @@ namespace SubbyGTK
 
 		public OpenSubtitlesClient ()
 		{
+			//check connectivity
+
 			_token = Login ();
+		}
+
+		public static bool CheckForConnection ()
+		{
+			try {
+				using (var client = new WebClient())
+				using (var stream = client.OpenRead(Apiurl)) {
+					return true;
+				}
+			} catch {
+				return false;
+			}
 		}
 
 		public string Login ()
@@ -58,7 +73,7 @@ namespace SubbyGTK
 			client.Params.Add (query);
 			var result = (Hashtable)client.Invoke (Apiurl);
 			bool hasdata;
-			if (bool.TryParse (result["data"].ToString(), out hasdata))
+			if (bool.TryParse (result ["data"].ToString (), out hasdata))
 				return TitleSearch (filename, lang);
 			return ParseSearchResult (result);
 		}
@@ -83,7 +98,7 @@ namespace SubbyGTK
 			client.Params.Add (query);
 			var result = (Hashtable)client.Invoke (Apiurl);
 			bool hasdata;
-			if (bool.TryParse (result["data"].ToString(), out hasdata))
+			if (bool.TryParse (result ["data"].ToString (), out hasdata))
 				return new List<SearchResult> ();
 			else
 				return ParseSearchResult (result);

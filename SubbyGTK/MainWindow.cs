@@ -264,4 +264,15 @@ public partial class MainWindow : Gtk.Window
 		DetailNode.ShowAll ();
 
 	}
+	public int ShowError(string message){
+		MessageDialog md = new MessageDialog (this, 
+		                                      DialogFlags.DestroyWithParent,
+		                                      MessageType.Error, 
+		                                      ButtonsType.Close, message);
+
+		int result = md.Run ();
+		md.Destroy();
+		return result;
+
+	}
 }

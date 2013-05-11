@@ -12,10 +12,16 @@ namespace SubbyGTK
 		{
 			Application.Init ();
 			MainWindow win = new MainWindow ();
-			win.PopulateLanguages ();
-			win.Show ();
+			if (!OpenSubtitlesClient.CheckForConnection()) {
+				win.PopulateLanguages ();
+				win.Show ();
+			} else {
+				win.ShowError ("Can't connect to Opensubtitles.org\nPlease check your internet connection");
+				win.Destroy ();
+				Application.Quit();
+				return;
+			}
 			Application.Run ();
-			//setup node
 
 	
 		}
