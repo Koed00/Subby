@@ -12,7 +12,7 @@ namespace SubbyGTK
 		{
 			Application.Init ();
 			MainWindow win = new MainWindow ();
-			if (!OpenSubtitlesClient.CheckForConnection()) {
+			if (OpenSubtitlesClient.CheckForConnection()) {
 				win.PopulateLanguages ();
 				win.Show ();
 			} else {
@@ -22,7 +22,6 @@ namespace SubbyGTK
 				return;
 			}
 			Application.Run ();
-
 	
 		}
 

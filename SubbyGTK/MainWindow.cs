@@ -72,6 +72,7 @@ public partial class MainWindow : Gtk.Window
 		public string SubRating { get; set; }
 
 		public string IMDBRating { get; set; }
+
 		public string IDMovieImdb{ get; set; }
 
 		public string Lang { get; set; }
@@ -113,7 +114,6 @@ public partial class MainWindow : Gtk.Window
 
 	}
 
-
 	public void PopulateLanguages ()
 	{
 
@@ -122,7 +122,7 @@ public partial class MainWindow : Gtk.Window
 		ArrayList langs = opensub.GetSubLanguages ();
 		var langstore = new Gtk.ListStore (typeof(string), typeof(string));
 		langstore.AppendValues ("All", "all");
-		int defrow=0;
+		int defrow = 0;
 		int i = 1;
 		foreach (Hashtable lang in langs) {
 			langstore.AppendValues (lang ["LanguageName"].ToString (), (lang ["SubLanguageID"] ?? string.Empty).ToString ());
@@ -137,13 +137,12 @@ public partial class MainWindow : Gtk.Window
 		
 	}
 
-
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
-		System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-		config.AppSettings.Settings.Remove("sublanguage");
-		config.AppSettings.Settings.Add("sublanguage", GetCurrentLang());
-		config.Save(ConfigurationSaveMode.Modified);
+		System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration (ConfigurationUserLevel.None);
+		config.AppSettings.Settings.Remove ("sublanguage");
+		config.AppSettings.Settings.Add ("sublanguage", GetCurrentLang ());
+		config.Save (ConfigurationSaveMode.Modified);
 	
 		Application.Quit ();
 		a.RetVal = true;
@@ -162,7 +161,7 @@ public partial class MainWindow : Gtk.Window
 		var store = new Gtk.NodeStore (typeof(MovieTreeNode));
 		statusbar1.Push (1, "Searching for filename.");
 		var opensub = new OpenSubtitlesClient ();
-		subtitles = opensub.FileSearch (fname, GetCurrentLang());
+		subtitles = opensub.FileSearch (fname, GetCurrentLang ());
 		statusbar1.Push (2, "Found " + subtitles.Count + " titles");
 		if (subtitles.Count > 0) {					
 			foreach (OpenSubtitlesClient.SearchResult sub in subtitles) {
@@ -183,7 +182,7 @@ public partial class MainWindow : Gtk.Window
 				node.Language = sub.LanguageName;
 				node.SubFormat = sub.SubFormat;
 				node.SubHearingImpaired = sub.SubHearingImpaired == "1";
-				node.IDMovieImdb=sub.IDMovieImdb;
+				node.IDMovieImdb = sub.IDMovieImdb;
 				store.AddNode (node);
 
 			}
@@ -235,16 +234,19 @@ public partial class MainWindow : Gtk.Window
 			GetSubs ();
 	}
 
-	private string GetCurrentLang(){
+	private string GetCurrentLang ()
+	{
 		var model = languagebox.Model;
 		TreeIter itar;
 		if (languagebox.GetActiveIter (out itar))
 			return (string)languagebox.Model.GetValue (itar, 1);
 		else {
 			return "all";
-		};
+		}
+		;
 
 	}
+
 	protected void OnSelectionChanged (object sender, EventArgs e)
 	{
 		var selectednode = (MovieTreeNode)MovieNodeView.NodeSelection.SelectedNode;
@@ -264,14 +266,16 @@ public partial class MainWindow : Gtk.Window
 		DetailNode.ShowAll ();
 
 	}
-	public int ShowError(string message){
+
+	public int ShowError (string message)
+	{
 		MessageDialog md = new MessageDialog (this, 
 		                                      DialogFlags.DestroyWithParent,
 		                                      MessageType.Error, 
 		                                      ButtonsType.Close, message);
 
 		int result = md.Run ();
-		md.Destroy();
+		md.Destroy ();
 		return result;
 
 	}
