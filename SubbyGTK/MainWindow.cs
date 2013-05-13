@@ -43,6 +43,8 @@ public partial class MainWindow : Window
 		filt.AddMimeType ("video/x-dv");
 		filt.AddMimeType ("video/x-sgi-movie");
 		FileChooserD.AddFilter (filt);
+        var lastfolder = (string)ConfigurationManager.AppSettings["lastfolder"];
+        if (!String.IsNullOrEmpty(lastfolder)) FileChooserD.SetCurrentFolder(lastfolder);
 	}
 
 	public void PushStatus (uint i, string statustext)
@@ -73,9 +75,14 @@ public partial class MainWindow : Window
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
-		Configuration config = ConfigurationManager.OpenExeConfiguration (ConfigurationUserLevel.None);
+		//save last selected language
+        Configuration config = ConfigurationManager.OpenExeConfiguration (ConfigurationUserLevel.None);
 		config.AppSettings.Settings.Remove ("sublanguage");
 		config.AppSettings.Settings.Add ("sublanguage", GetCurrentLang ());
+       //save last selected folder
+        config.AppSettings.Settings.Remove("lastfolder");
+        config.AppSettings.Settings.Add("lastfolder", System.IO.Path.GetPathRoot(_fname));
+        //save it
 		config.Save (ConfigurationSaveMode.Modified);
 
 		Application.Quit ();
