@@ -81,7 +81,7 @@ public partial class MainWindow : Window
 		config.AppSettings.Settings.Add ("sublanguage", GetCurrentLang ());
        //save last selected folder
         config.AppSettings.Settings.Remove("lastfolder");
-        config.AppSettings.Settings.Add("lastfolder", System.IO.Path.GetPathRoot(_fname));
+		config.AppSettings.Settings.Add("lastfolder", System.IO.Path.GetDirectoryName(_fname));
         //save it
 		config.Save (ConfigurationSaveMode.Modified);
 
